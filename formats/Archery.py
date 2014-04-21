@@ -38,33 +38,20 @@ class Archery(yapsy.IPlugin.IPlugin):
 
     scorefile = "ARCHERY.SCR"
 
-    massage_in = {
-        "name"  : (lambda s: s.decode('ascii').strip()),
-        "score" : (lambda s: int(s.decode('ascii'))),
-    }
-
-    massage_out = {
-        "name"  : (lambda s: s.encode('ascii')),
-        "score" : (lambda s: str(s).encode('ascii')),
-    }
-
-    score_reader = FileReader([
-        ("name", "9s"),
-        ("score", "4s"),
-    ],
-    massage_in = massage_in,
-    massage_out = massage_out,
+    score_reader = FileReader(
+        format = [
+            ("name", "9s"),
+            ("score", "4s"),
+        ],
+        massage_in = {
+            "name"  : (lambda s: s.decode('ascii').strip()),
+            "score" : (lambda s: int(s.decode('ascii'))),
+        },
+        massage_out = {
+            "name"  : (lambda s: s.encode('ascii')),
+            "score" : (lambda s: str(s).encode('ascii')),
+        },
     )
-
-    massage_in = {
-        "name"  : (lambda s: s.decode('ascii').strip()),
-        "score" : (lambda s: int(s.decode('ascii'))),
-    }
-
-    massage_out = {
-        "name"  : (lambda s: s.encode('ascii')),
-        "score" : (lambda s: str(s).encode('ascii')),
-    }
 
     @staticmethod
     def verify(path):
@@ -77,5 +64,5 @@ class Archery(yapsy.IPlugin.IPlugin):
         scores = []
         with open(os.path.join(path, Archery.scorefile), "rb") as scorefile:
             for data in iter(lambda: scorefile.read(Archery.score_reader.struct.size), b"\0"*13):
-                scores.append(Archery.score_reader.unpack(data)) # but these need stripped
+                scores.append(Archery.score_reader.unpack(data))
         return scores
