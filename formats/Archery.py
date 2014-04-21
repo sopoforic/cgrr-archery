@@ -59,7 +59,7 @@ class Archery(yapsy.IPlugin.IPlugin):
         return utilities.verify(Archery.identifying_files, path)
 
     @staticmethod
-    def export_scores(path):
+    def read_scores(path):
         """Reads high score table."""
         scores = []
         with open(os.path.join(path, Archery.scorefile), "rb") as scorefile:
