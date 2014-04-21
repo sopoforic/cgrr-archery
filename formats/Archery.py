@@ -49,7 +49,7 @@ class Archery(yapsy.IPlugin.IPlugin):
         },
         massage_out = {
             "name"  : (lambda s: s.encode('ascii')),
-            "score" : (lambda s: str(s).encode('ascii')),
+            "score" : (lambda s: str(s).rjust(4).encode('ascii')),
         },
     )
 
