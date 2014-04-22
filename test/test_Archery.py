@@ -20,17 +20,49 @@ import logging
 class Test_archery_a:
 
     def setup(self):
+        import io
+        
         from yapsy.PluginManager import PluginManager
-        self.manager = PluginManager()
-        self.manager.setPluginPlaces(["formats"])
-        self.manager.collectPlugins()
+
+        manager = PluginManager()
+        manager.setPluginPlaces(["formats"])
+        manager.collectPlugins()
+        self.plugin = manager.getPluginByName("Archery (DOS)").plugin_object
+        # This mock data is a copy of a real score file
+        mock = (b'Computer   84MobyGamer  47Moby Game  39MobyGamer  35Moby '
+                b'Game  27tiny       26rascal      1').ljust(256, b'\0')
+        self.scorefile = io.BytesIO(mock)
 
     def teardown(self):
-        self.manager = None
+        self.plugin = None
+        self.scorefile = None
+
+    def test_extract_scores_from_path(self):
+        """Test whether extract_scores opens the right file, given a path."""
+        from unittest.mock import mock_open, patch
+        with patch('builtins.open', mock_open(), create=True) as m:
+            try:
+                self.plugin.extract_scores("foo")
+            except TypeError:
+                # mock_open makes an object with a faulty read method (doing
+                # read(n) returns the whole file rather than just the next n
+                # bytes), so rather than try to fix that, just don't bother with
+                # the actual data, and catch the error that causes.
+                pass
+            m.assert_called_once_with("foo\\ARCHERY.SCR", 'rb')
+
+    def test_extract_scores_from_scorepath(self):
+        """Test whether extract_scores opens the scorepath given."""
+        from unittest.mock import mock_open, patch
+        with patch('builtins.open', mock_open(), create=True) as m:
+            try:
+                self.plugin.extract_scores(scorepath="foo")
+            except TypeError:
+                pass
+            m.assert_called_once_with("foo", 'rb')        
 
     def test_read_scores(self):
-        import os, inspect
-
+        """Test whether read_scores correctly interprets known scores."""
         correct = [
             {'score': 84, 'name': 'Computer'},
             {'score': 47, 'name': 'MobyGamer'},
@@ -41,22 +73,13 @@ class Test_archery_a:
             {'score': 1, 'name': 'rascal'}
         ]
 
-        plugin = self.manager.getPluginByName("Archery (DOS)").plugin_object
-        
-        actual = plugin.read_scores(os.path.join(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))), "test_archery_a"))
+        actual = self.plugin.read_scores(self.scorefile)
         
         assert actual == correct
 
     def test_write_scores(self):
-        import os, inspect
+        """Roundtrip a score file with read_scores and write_scores."""
+        scores = self.plugin.read_scores(self.scorefile)
+        actual = self.plugin.write_scores(scores)
 
-        plugin = self.manager.getPluginByName("Archery (DOS)").plugin_object
-
-        with open (os.path.join(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))), "test_archery_a", "ARCHERY.SCR"), 'rb') as infile:
-            correct = infile.read()
-        
-        scores = plugin.read_scores(os.path.join(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))), "test_archery_a"))
-
-        actual = plugin.write_scores(scores)
-        
-        assert actual == correct
+        assert actual == self.scorefile.getvalue()

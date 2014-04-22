@@ -59,12 +59,23 @@ class Archery(yapsy.IPlugin.IPlugin):
         return utilities.verify(Archery.identifying_files, path)
 
     @staticmethod
-    def read_scores(path):
+    def extract_scores(path=None, scorepath=None):
+        if not (path or scorepath):
+            raise ValueError("Either path or scorefile must be specified.")
+        elif (path and scorepath):
+            raise ValueError("Only one of path or scorefile may be specified.")
+        if not scorepath:
+            scorepath = os.path.join(path, Archery.scorefile)
+        with open(scorepath, "rb") as scorefile:
+            scores = Archery.read_scores(scorefile)
+        return scores
+
+    @staticmethod
+    def read_scores(scorefile):
         """Reads high score table."""
         scores = []
-        with open(os.path.join(path, Archery.scorefile), "rb") as scorefile:
-            for data in iter(lambda: scorefile.read(Archery.score_reader.struct.size), b"\0"*13):
-                scores.append(Archery.score_reader.unpack(data))
+        for data in iter(lambda: scorefile.read(Archery.score_reader.struct.size), b"\0"*13):
+            scores.append(Archery.score_reader.unpack(data))
         return scores
 
     @staticmethod
@@ -73,5 +84,4 @@ class Archery(yapsy.IPlugin.IPlugin):
         data = bytes()
         for score in scores:
             data += Archery.score_reader.pack(score)
-            logging.debug(data)
-        return data.ljust(256, b"\0")
+        return data.ljust(256, b"\0") # null pad to 256 bytes
