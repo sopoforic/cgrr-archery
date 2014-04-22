@@ -39,6 +39,7 @@ class Test_archery_a:
 
     def test_extract_scores_from_path(self):
         """Test whether extract_scores opens the right file, given a path."""
+        import os
         from unittest.mock import mock_open, patch
         with patch('builtins.open', mock_open(), create=True) as m:
             try:
@@ -49,7 +50,7 @@ class Test_archery_a:
                 # bytes), so rather than try to fix that, just don't bother with
                 # the actual data, and catch the error that causes.
                 pass
-            m.assert_called_once_with("foo\\ARCHERY.SCR", 'rb')
+            m.assert_called_once_with(os.path.join("foo", "ARCHERY.SCR"), 'rb')
 
     def test_extract_scores_from_scorepath(self):
         """Test whether extract_scores opens the scorepath given."""
