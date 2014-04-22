@@ -46,3 +46,17 @@ class Test_archery_a:
         actual = plugin.read_scores(os.path.join(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))), "test_archery_a"))
         
         assert actual == correct
+
+    def test_write_scores(self):
+        import os, inspect
+
+        plugin = self.manager.getPluginByName("Archery (DOS)").plugin_object
+
+        with open (os.path.join(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))), "test_archery_a", "ARCHERY.SCR"), 'rb') as infile:
+            correct = infile.read()
+        
+        scores = plugin.read_scores(os.path.join(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))), "test_archery_a"))
+
+        actual = plugin.write_scores(scores)
+        
+        assert actual == correct
