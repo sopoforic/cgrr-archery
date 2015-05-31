@@ -21,9 +21,9 @@ class Test_archery_a:
 
     def setup(self):
         import io
-        import Archery
+        import archery
 
-        self.Archery = Archery
+        self.archery = archery
 
         # This mock data is a copy of a real score file
         mock = (b'Computer   84MobyGamer  47Moby Game  39MobyGamer  35Moby '
@@ -40,7 +40,7 @@ class Test_archery_a:
         from unittest.mock import mock_open, patch
         with patch('builtins.open', mock_open(), create=True) as m:
             try:
-                self.Archery.extract_scores("foo")
+                self.archery.extract_scores("foo")
             except TypeError:
                 # mock_open makes an object with a faulty read method (doing
                 # read(n) returns the whole file rather than just the next n
@@ -54,7 +54,7 @@ class Test_archery_a:
         from unittest.mock import mock_open, patch
         with patch('builtins.open', mock_open(), create=True) as m:
             try:
-                self.Archery.extract_scores(scorepath="foo")
+                self.archery.extract_scores(scorepath="foo")
             except TypeError:
                 pass
             m.assert_called_once_with("foo", 'rb')
@@ -71,13 +71,13 @@ class Test_archery_a:
             {'score': 1, 'name': 'rascal'}
         ]
 
-        actual = self.Archery.read_scores(self.scorefile)
+        actual = self.archery.read_scores(self.scorefile)
 
         assert actual == correct
 
     def test_write_scores(self):
         """Roundtrip a score file with read_scores and write_scores."""
-        scores = self.Archery.read_scores(self.scorefile)
-        actual = self.Archery.write_scores(scores)
+        scores = self.archery.read_scores(self.scorefile)
+        actual = self.archery.write_scores(scores)
 
         assert actual == self.scorefile.getvalue()
