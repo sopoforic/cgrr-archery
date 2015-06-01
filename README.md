@@ -37,6 +37,15 @@ with open("path/to/ARCHERY.SCR", "wb") as scorefile:
     scorefile.write(data)
 ```
 
+Requirements
+============
+
+* Tested with Python 2.7+ or 3.2+
+    * Python 2.6 lacks OrderedDict. Sorry!
+* cgrr from https://github.com/sopoforic/cgrr
+    * `pip install git+git://github.com/sopoforic/cgrr.git`
+
+
 License
 =======
 
