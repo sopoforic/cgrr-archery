@@ -5,5 +5,5 @@ python:
   - "3.3"
   - "3.4"
   - "nightly"
-install: "pip install git+git://github.com/sopoforic/cgrr.git"
+cache: pip
 script: nosetests
