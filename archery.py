@@ -16,8 +16,6 @@
 # You should have received a copy of the GNU General Public License
 # along with CGRR.  If not, see <http://www.gnu.org/licenses/>.
 """Parses Archery files."""
-import logging
-import struct
 import os
 
 import cgrr
