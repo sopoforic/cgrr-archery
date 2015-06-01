@@ -37,7 +37,11 @@ class Test_archery_a:
     def test_extract_scores_from_path(self):
         """Test whether extract_scores opens the right file, given a path."""
         import os
-        from unittest.mock import mock_open, patch
+        try:
+            from unittest.mock import mock_open, patch
+        except ImportError:
+            from nose import SkipTest
+            raise SkipTest
         with patch('builtins.open', mock_open(), create=True) as m:
             try:
                 self.archery.extract_scores("foo")
@@ -50,8 +54,12 @@ class Test_archery_a:
             m.assert_called_once_with(os.path.join("foo", "ARCHERY.SCR"), 'rb')
 
     def test_extract_scores_from_scorepath(self):
-        """Test whether extract_scores opens the scorepath given."""
-        from unittest.mock import mock_open, patch
+        """Tes t whether extract_scores opens the scorepath given."""
+        try:
+            from unittest.mock import mock_open, patch
+        except ImportError:
+            from nose import SkipTest
+            raise SkipTest
         with patch('builtins.open', mock_open(), create=True) as m:
             try:
                 self.archery.extract_scores(scorepath="foo")
