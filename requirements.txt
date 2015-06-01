@@ -1,1 +1,1 @@
--e git+git@github.com:sopoforic/cgrr.git#egg=cgrr-master
+-e git+https://github.com/sopoforic/cgrr.git#egg=cgrr-master
