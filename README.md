@@ -40,4 +40,5 @@ with open("path/to/ARCHERY.SCR", "wb") as scorefile:
 License
 =======
 
-This module is available under the GPL v3 or later. See the file COPYING for details.
+This module is available under the GPL v3 or later. See the file COPYING for
+details.
