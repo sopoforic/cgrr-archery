@@ -54,7 +54,7 @@ class Test_archery_a:
             m.assert_called_once_with(os.path.join("foo", "ARCHERY.SCR"), 'rb')
 
     def test_extract_scores_from_scorepath(self):
-        """Tes t whether extract_scores opens the scorepath given."""
+        """Test whether extract_scores opens the scorepath given."""
         try:
             from unittest.mock import mock_open, patch
         except ImportError:
