@@ -4,6 +4,8 @@ archery
 This module reads and writes score files for Archery, a DOS game by Brian
 Blankenship.
 
+![Test](https://github.com/sopoforic/cgrr-archery/workflows/Test/badge.svg)
+
 Usage
 =====
 
@@ -40,8 +42,7 @@ with open("path/to/ARCHERY.SCR", "wb") as scorefile:
 Requirements
 ============
 
-* Tested with Python 2.7+ or 3.2+
-    * Python 2.6 lacks OrderedDict. Sorry!
+* Tested with Python 3.5-3.9
 * cgrr from https://github.com/sopoforic/cgrr
     * `pip install git+git://github.com/sopoforic/cgrr.git`
 

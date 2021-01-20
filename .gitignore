@@ -1,0 +1,7 @@
+# Test output
+.coverage
+htmlcov/
+
+# Pipenv stuff used in dev
+Pipfile
+Pipfile.lock
