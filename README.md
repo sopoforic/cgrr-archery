@@ -4,7 +4,7 @@ archery
 This module reads and writes score files for Archery, a DOS game by Brian
 Blankenship.
 
-![Test](https://github.com/sopoforic/cgrr-archery/workflows/Test/badge.svg)
+![Test](https://github.com/sopoforic/cgrr-archery/workflows/Test/badge.svg) [![Test Coverage](https://api.codeclimate.com/v1/badges/7b8a486c65bda82fd8f1/test_coverage)](https://codeclimate.com/github/sopoforic/cgrr-archery/test_coverage) [![Maintainability](https://api.codeclimate.com/v1/badges/7b8a486c65bda82fd8f1/maintainability)](https://codeclimate.com/github/sopoforic/cgrr-archery/maintainability)
 
 Usage
 =====
