@@ -15,11 +15,12 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with CGRR.  If not, see <http://www.gnu.org/licenses/>.
-import logging
+import sys
+
 import pytest
 
-class Test_archery_a:
 
+class Test_archery_a:
     def setup(self):
         import io
         import archery
@@ -41,11 +42,12 @@ class Test_archery_a:
             {'score': 1, 'name': 'rascal'}
         ]
 
-
     def teardown(self):
         self.plugin = None
         self.scorefile = None
 
+    @pytest.mark.skipif(sys.version_info < (3, 7),
+                        reason="broken mock_open")
     def test_extract_scores_from_path(self):
         """Test whether extract_scores opens the right file, given a path."""
         import os
@@ -58,6 +60,8 @@ class Test_archery_a:
 
         assert scores == self.correct
 
+    @pytest.mark.skipif(sys.version_info < (3, 7),
+                        reason="broken mock_open")
     def test_extract_scores_from_scorepath(self):
         """Test whether extract_scores opens the scorepath given."""
         from unittest.mock import mock_open, patch
