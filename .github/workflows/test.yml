@@ -18,6 +18,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install flake8 pytest pytest-cov
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 -o cc-test-reporter
+        chmod +x cc-test-reporter
+        ./cc-test-reporter before-build
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
@@ -26,10 +29,10 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=100 --statistics
     - name: Test with pytest
       run: |
-        pytest --cov=. --cov-report=html
-    - name: Archive code coverage results
+        pytest --cov=. --cov-report xml --cov-report term
+    - name: Report coverage
       if: matrix.python-version == '3.9.x'
-      uses: actions/upload-artifact@v2
-      with:
-        name: code-coverage-report
-        path: htmlcov
+      env:
+        CC_TEST_REPORTER_ID: ${{ secrets.cc_test_reporter_id }}
+      run: |
+        ./cc-test-reporter after-build --exit-code $?
